@@ -9,7 +9,12 @@ def _check_models():
     except Exception as e:
         # Exception handling
         return None
+
+def _AddImageContent(Title, Src):
+       st.header(Title)
+       st.image(Src, width=200)
     
+
 # Create Sidebar to configure OPEN AI API
 __side_bar = st.sidebar
 _open_ai_api_key = __side_bar.text_input('Please provide you OPEN AI API KEY : ', '...',  help = "...")
@@ -48,8 +53,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
    ])
 
 with tab1:
-   st.header("Tab 1")
-   st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
+   _AddImageContent("Tab 1","https://static.streamlit.io/examples/cat.jpg")
 
 with tab2:
    st.header("Tab 2")
