@@ -106,7 +106,13 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
    ,"Chatbot"
    ])
 
+
+# ========================================[Summarizing TAB]===============================================================================
 with tab1:
+    st.header("Summarizing")
+    st.write("Use Chat Gpt to summarize text with delimiter number of words or not.")
+    st.divider()
+
     _txt_to_be_summarized = st.text_area('Text to summarize : ', '')
     # Enable/disable checkbox based on a condition
     _is_words_limited = st.checkbox("Limit words")
@@ -114,7 +120,7 @@ with tab1:
 
     if _is_words_limited:
         _total_words = int(st.number_input('Max words: ',min_value=1, step=1, help="Number of words you want in your summary."))
-        prompt = f"""
+        _summarize_prompt = f"""
         Your task is to generate a short summary of a text
 
         Summarize the text below, delimited by triple 
@@ -123,7 +129,7 @@ with tab1:
         Text: ```{_txt_to_be_summarized}```
         """
     else:
-        prompt = f"""
+        _summarize_prompt = f"""
                 Your task is to generate a short summary of a text
 
                 Summarize the text below, delimited by triple 
@@ -131,10 +137,7 @@ with tab1:
 
                 Text: ```{_txt_to_be_summarized}```
                 """
-
-
-
-    
+        
 # This code block is executed when the "Summarize" button is clicked in the "Summarizing" tab of the
 # Streamlit app. It retrieves the text to be summarized from a text area input, creates a prompt for
 # the OpenAI API to generate a summary, and calls the `get_completion` function to generate the
@@ -145,7 +148,7 @@ with tab1:
         st.divider()
         try:
             with st.spinner('Wait for it...'):
-                response = get_completion(prompt, _model, _temperature)
+                response = get_completion(_summarize_prompt, _model, _temperature)
                 
             st.success('Done!')
             st.write(response)
@@ -153,11 +156,54 @@ with tab1:
         except Exception as e:
             st.error(f'This is an error : {e}', icon="🚨")
 
+# ========================================[Summarizing TAB]===============================================================================
 
 
+# ========================================[Inferring TAB]==================================================================================
 with tab2:
-   st.header("Tab 2")
-   st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
+   st.header("Inferring")
+   st.write("Use Chat Gpt for sentiment analisys.")
+   st.divider()
+
+   _txt_inferring = st.text_area('Text to be analized : ', '')
+
+   _inferring_prompt = f"""
+                        What is the sentiment of the following text,
+                        which is delimited with triple backticks?
+
+                        text: '''{_txt_inferring}'''
+                        """
+   _emotions_prompt = f"""
+                        Identify a list of emotions that the writer of the 
+                        following text is expressing. Include no more than 
+                        five items in the list. 
+
+                        Format your response as a list of enumerated items with new line format for every item
+
+                        text: '''{_txt_inferring}'''
+                        """
+   _identify_emotions = st.checkbox("Get emotions of the text")
+    
+   emotions = None
+   if st.button('Inferring'):
+        st.divider()
+        try:
+            with st.spinner('Wait for it...'):
+                response = get_completion(_inferring_prompt, _model, _temperature)
+                if _identify_emotions is True:
+                    emotions = get_completion(_emotions_prompt, _model, _temperature)
+
+            st.success('Done!')
+            st.write(response)
+            if emotions is not None:
+                st.subheader("Emotions in the text : ")
+                st.write(emotions)
+            
+        except Exception as e:
+            st.error(f'This is an error : {e}', icon="🚨")
+
+
+# ========================================[Inferring TAB]==================================================================================
 
 with tab3:
    st.header("Tab 3")
