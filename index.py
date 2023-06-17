@@ -212,26 +212,63 @@ with tab3:
    st.header("Transforming")
    st.write("Use Chat Gpt for translation, spelling and grammar checking, tone adjustment, and format conversion.")
    st.divider()
-   _txt_translating = st.text_area('Text to be translated : ', '')
-   _languages = ["Spanish", "English", "Korean"]
-   _language_selection = st.selectbox("Languages:", options=_languages)
-   _translating_prompt = f"""
-                       Translate the following text to {_language_selection},
-                        which is delimited with triple backticks?
 
-                        text: '''{_txt_translating}'''
-                        """
-   if st.button("Translate"):
-        st.divider()
-        try:
-            with st.spinner('Wait for it...'):
-                response = get_completion(_translating_prompt, _model, _temperature)
+   # `input_column, output_column = st.columns(2)` is creating two columns in the Streamlit app
+   # interface and assigning them to the variables `input_column` and `output_column`. This allows for
+   # side-by-side display of content or widgets in the app. The `2` parameter specifies that there
+   # should be two columns.
+   st.subheader("Translation")
+   input_column, output_column = st.columns(2)
 
-            st.success('Done!')
-            st.write(response)
-            
-        except Exception as e:
-            st.error(f'This is an error : {e}', icon="🚨")
+   with input_column:
+    _txt_translating = st.text_area('Text to be translated : ', '')
+    _languages = ["Spanish", "English", "Korean"]
+    _language_selection = st.selectbox("Languages:", options=_languages)
+    _translating_prompt = f"""
+                        Translate the following text to {_language_selection},
+                            which is delimited with triple backticks?
+
+                            text: '''{_txt_translating}'''
+                            """
+    if st.button("Translate"):
+            try:
+                with st.spinner('Wait for it...'):
+                    response = get_completion(_translating_prompt, _model, _temperature)
+
+                st.success('Done!')
+                with output_column:
+                    st.text_area('Text translated : ', response)
+                
+            except Exception as e:
+                st.error(f'This is an error : {e}', icon="🚨")
+
+       
+   st.subheader("Tone transformation")
+   tone_col_in, tone_col_out = st.columns(2)
+   with tone_col_in:
+        _txt_translating_tone = st.text_area('Input text : ', '')
+
+        _tones = ["Business letter", "Casual", "Formal", "Teewt", "Facebook Post"]
+
+        _language_selection_tone = st.selectbox("Tones :", options=_tones)
+        _translating_tone_prompt = f"""
+                            Translate the following text to a {_language_selection_tone},
+                            which is delimited with triple backticks?
+
+                            text: '''{_txt_translating_tone}'''
+                            """
+        if st.button("Translate tone"):
+                try:
+                    with st.spinner('Wait for it...'):
+                        response = get_completion(_translating_tone_prompt, _model, _temperature)
+
+                    st.success('Done!')
+                    with tone_col_out:
+                        st.text_area('Text translated : ', response)
+                    
+                except Exception as e:
+                    st.error(f'This is an error : {e}', icon="🚨")
+
        
 # ========================================[Transforming TAB]==================================================================================
 
