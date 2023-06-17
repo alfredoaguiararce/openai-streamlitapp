@@ -205,9 +205,35 @@ with tab2:
 
 # ========================================[Inferring TAB]==================================================================================
 
+
+# ========================================[Transforming TAB]==================================================================================
+
 with tab3:
-   st.header("Tab 3")
-   st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
+   st.header("Transforming")
+   st.write("Use Chat Gpt for translation, spelling and grammar checking, tone adjustment, and format conversion.")
+   st.divider()
+   _txt_translating = st.text_area('Text to be translated : ', '')
+   _languages = ["Spanish", "English", "Korean"]
+   _language_selection = st.selectbox("Languages:", options=_languages)
+   _translating_prompt = f"""
+                       Translate the following text to {_language_selection},
+                        which is delimited with triple backticks?
+
+                        text: '''{_txt_translating}'''
+                        """
+   if st.button("Translate"):
+        st.divider()
+        try:
+            with st.spinner('Wait for it...'):
+                response = get_completion(_translating_prompt, _model, _temperature)
+
+            st.success('Done!')
+            st.write(response)
+            
+        except Exception as e:
+            st.error(f'This is an error : {e}', icon="🚨")
+       
+# ========================================[Transforming TAB]==================================================================================
 
 with tab4:
    st.header("Tab 4")
