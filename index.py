@@ -98,12 +98,12 @@ if __side_bar.button('Configure Open AI') and _open_ai_api_key != '':
 # be clicked to display different content or functionality within the app. The variables `tab1`,
 # `tab2`, `tab3`, `tab4`, and `tab5` are assigned to the corresponding tabs, which can be used to
 # display content or widgets specific to each tab.
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3 = st.tabs([
    "Summarizing" 
    ,"Inferring"
    ,"Transforming"
-   ,"Expanding"
-   ,"Chatbot"
+#    ,"Expanding"
+#    ,"Chatbot"
    ])
 
 
@@ -271,11 +271,3 @@ with tab3:
 
        
 # ========================================[Transforming TAB]==================================================================================
-
-with tab4:
-   st.header("Tab 4")
-   st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
-
-with tab5:
-   st.header("Tab 5")
-   st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
